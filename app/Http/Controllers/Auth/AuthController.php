@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\User;
 use Validator;
 use App\Http\Controllers\Controller;
+use Auth,Session;
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 
@@ -21,14 +23,14 @@ class AuthController extends Controller
     |
     */
 
-    use AuthenticatesAndRegistersUsers, ThrottlesLogins;
+   use AuthenticatesAndRegistersUsers;
 
     /**
      * Where to redirect users after login / registration.
      *
      * @var string
      */
-    protected $redirectTo = '/';
+   protected $redirectTo = '/';
     
     protected $redirectPath = '/home';
     
@@ -80,17 +82,30 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
             'co_name' => $data['co_name'],
-            
             'co_add' => $data['co_add'],
             'co_cont_name' => $data['co_cont_name'],
             'co_cont_no' => $data['co_cont_no'],
-            'co_adhar_no' => $data['co_adhar_no'],
-            
-            
-            
-            
-            
-            
+            'co_adhar_no' => $data['co_adhar_no']
         ]);
+    }
+
+    public function getLogin() {
+
+        return view('auth.login');
+    }
+
+    public function postLogin(Request $req)
+    {
+       //dd($req->name);
+       if (Auth::attempt(['name' => $req->name, 'password' => $req->password])) {
+            $user = Auth::user();
+            Session::put('role',$user->role);
+            return redirect()->intended('home');
+        }
+        else{
+            //dd('hi');
+            $req->session()->flash('status', 'User Credentials are not matched!');
+            return redirect('login');
+        }
     }
 }

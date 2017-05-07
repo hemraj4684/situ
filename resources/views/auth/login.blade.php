@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Laravel</title>
+    <title>Situ</title>
 
     
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -127,20 +127,26 @@ Navi Mumbai </center></label>
     
  
 <div class="container">
+
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
+        @if(Session::has('status'))
+            <div class="alert alert-danger" role="alert">
+                    {{Session::get('status')}}
+            </div>
+        @endif
             <div class="panel panel-default">
                 <div class="panel-heading">Login</div>
                 <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
+                    <form class="form-horizontal" role="form" method="post" action="{{ route('auth.login') }}">
                         {{ csrf_field() }}
 
-                          <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                          
                         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                            <label for="name" id="uname" class="col-md-4 control-label">PAN Number&nbsp; <span style="color: red">*</span></label>
+                            <label for="name" id="uname" class="col-md-4 control-label">PAN NUMBER&nbsp; <span style="color: red">*</span></label>
 
                             <div class="col-md-6">
-                                <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" ;><!--onkeypress="UpperCase('name');" onkeyup="UpperCase('name');">-->
+                                <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" required><!--onkeypress="UpperCase('name');" onkeyup="UpperCase('name');">-->
 
                                 @if ($errors->has('name'))
                                     <span class="help-block">
@@ -154,7 +160,7 @@ Navi Mumbai </center></label>
                             <label for="password" class="col-md-4 control-label">Password&nbsp;<span style="color: red">*</span></label>
 
                             <div class="col-md-6">
-                                <input id="password" type="password" class="form-control" name="password">
+                                <input id="password" type="password" class="form-control" name="password" required>
 
                                 @if ($errors->has('password'))
                                     <span class="help-block">

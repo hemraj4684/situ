@@ -11,28 +11,31 @@
 |
 */
 
+
 Route::get('log', function () {
     return view('log');
 });
 
+Route::get('notAuthorize', function () {
+    return view('errors.503');
+});
 
 
 Route::get('welcome', function () {
     return view('welcome');
 });
 
-Route::get('demo', function () {
-    return view('demo');
-});
+
 
 Route::get('header', function () {
     return view('header');
 });
 
 
-Route::get('login', function () {
-    return view('login');
-});
+// Route::get('login', function () {
+//     return view('login');
+// });
+// Route::post('login', 'Auth\AuthController@checkReg');
 
 Route::get('reg_1', function () {
     return view('reg_1');
@@ -48,6 +51,17 @@ Route::get('reg_3', function () {
 
 Route::get('/user/login', function () {
     return view('user.login');
+});
+
+
+Route::get('/', 'Auth\AuthController@getLogin');
+Route::post('/auth/login', 'Auth\AuthController@postLogin')->name('auth.login');
+Route::auth();
+
+Route::group(['middleware' => ['auth','role:user'], 'prefix' => 'user'], function () {
+    Route::get('protected', function() {
+        return "You are User!!";
+    });
 });
 
 
@@ -157,10 +171,8 @@ Route::get('/OIC/OIC_dashboard', 'HomeController@OIC_dashboard');
 Route::get('/OIC/OIC_Format_IV', 'HomeController@OIC_app_form');
 //Route::get('/admin/approved', array('uses' => 'IM_RegController@approve'));
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
-Route::auth();
+
+
 
 Route::get('home', array('uses' => 'HomeController@index') );
